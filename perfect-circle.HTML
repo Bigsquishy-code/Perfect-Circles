@@ -1,31 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <link rel="stylesheet" href="styles.css">
-  <title>Perfect Circles</title>
+  <title>Perfect Circles V2</title>
 </head>
-
 <body>
 
   <div id="menu">
-
     <div id="menuCard">
-
-      <div class="title">
-        ⭕ PERFECT CIRCLES
-      </div>
-
+      <div class="title">⭕ PERFECT CIRCLES V2</div>
       <div class="subtitle">
-        A minimalist tower defense survival system
+        Tower Defense • Strategy Layer • Evolution Engine
       </div>
 
       <div class="menuStats">
         <div>Survive endless waves</div>
-        <div>Upgrade your circle tower</div>
-        <div>Fight bosses every 5 waves</div>
+        <div>Upgrade + evolve your tower</div>
+        <div>Boss scaling every 5 waves</div>
       </div>
 
       <button id="playBtn" class="menuBtn play">
@@ -37,49 +30,25 @@
       </button>
 
       <div class="smallHint">
-        Tip: Higher waves = faster enemies + stronger bosses
+        Tip: V2 introduces scaling enemy intelligence + assistant AI combat
       </div>
-
     </div>
-
   </div>
 
   <div id="ui">
 
     <div class="panel">
-
       <h2>🏰 CORE</h2>
-
-      <div class="stat">
-        Gold: <span id="gold">0</span>
-      </div>
-
-      <div class="stat">
-        Crystals: <span id="crystals">0</span>
-      </div>
-
-      <div class="stat">
-        Wave: <span id="wave">1</span>
-      </div>
-
-      <div class="stat">
-        Kills: <span id="kills">0</span>
-      </div>
-
-      <div class="stat">
-        DPS: <span id="dps">0</span>
-      </div>
-
-      <div class="stat">
-        Lives: <span id="lives">20</span>
-      </div>
-
+      <div class="stat">Gold: <span id="goldEl">0</span></div>
+      <div class="stat">Crystals: <span id="crystalsEl">0</span></div>
+      <div class="stat">Wave: <span id="waveEl">1</span></div>
+      <div class="stat">Kills: <span id="killsEl">0</span></div>
+      <div class="stat">DPS: <span id="dpsEl">0</span></div>
+      <div class="stat">Lives: <span id="livesEl">20</span></div>
     </div>
 
     <div class="panel">
-
       <h2>⬆ UPGRADES</h2>
-
       <button id="damageBtn"></button>
       <button id="speedBtn"></button>
       <button id="rangeBtn"></button>
@@ -88,35 +57,34 @@
       <button id="flameBtn"></button>
       <button id="assistantBtn"></button>
 
+      <div id="v3UpgradeSlot"></div>
     </div>
 
     <div class="panel">
-
       <h2>⚡ CONTROL</h2>
+      <button id="waveBtn">▶ START WAVE</button>
+      <button id="speedToggle">⏩ SPEED x1</button>
+      <button id="autoBtn">AUTO WAVE: OFF</button>
+      <button id="prestigeBtn">✨ PRESTIGE</button>
+    </div>
 
-      <button id="waveBtn">
-        ▶ START WAVE
-      </button>
+    <div class="panel">
+      <h2>🧠 STRATEGY LAYER</h2>
+      <button id="strategyModeBtn">TACTICS: OFF</button>
+      <button id="aiOverlayBtn">AI OVERLAY</button>
+      <button id="enemyIntelBtn">ENEMY INTEL</button>
 
-      <button id="speedToggle">
-        ⏩ SPEED x1
-      </button>
-
-      <button id="autoBtn">
-        AUTO WAVE: ON
-      </button>
-
-      <button id="prestigeBtn">
-        ✨ PRESTIGE
-      </button>
-
+      <div class="smallHint">
+        V2 Feature: Unlocks predictive targeting + enemy behavior analysis
+      </div>
     </div>
 
   </div>
+
   <div id="vignette"></div>
+
   <canvas id="game"></canvas>
 
   <script src="perfect-circle.js"></script>
 </body>
-
 </html>
