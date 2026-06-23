@@ -1,3 +1,4 @@
+let lastTime = Date.now();
 
 /* ================= UI ELEMENTS ================= */
 
@@ -98,6 +99,26 @@ let turrets = [];
 
 let screenShake = 0;
 
+/* ================= STATS ================= */
+
+const stats = {
+
+    highestWave: save.highestWave || 1,
+
+    totalGoldEarned: save.totalGoldEarned || 0,
+
+    totalDamage: save.totalDamage || 0,
+
+    bossesKilled: save.bossesKilled || 0,
+
+    playTime: save.playTime || 0,
+
+    prestiges: save.prestiges || 0,
+
+    totalKills: save.totalKills || 0
+
+};
+
 /* ================= STARS ================= */
 
 const stars = [];
@@ -148,7 +169,6 @@ const tower = {
 resize();
 
 /* ================= SAVE ================= */
-
 function saveGame() {
 
     localStorage.setItem(
@@ -169,9 +189,19 @@ function saveGame() {
             freeze: tower.freeze,
             flameLevel: tower.flameLevel,
             multiShot: tower.multiShot,
-            assistantLevel: tower.assistantLevel
+            assistantLevel: tower.assistantLevel,
+
+            highestWave: stats.highestWave,
+            totalGoldEarned: stats.totalGoldEarned,
+            totalDamage: stats.totalDamage,
+            bossesKilled: stats.bossesKilled,
+            playTime: stats.playTime,
+            prestiges: stats.prestiges,
+            totalKills: stats.totalKills
+
         })
     );
+
 }
 
 setInterval(saveGame, 3000);
@@ -523,7 +553,7 @@ class Bullet {
             this.target.health -= dmg;
 
             damageDone += dmg;
-
+            stats.totalDamage += dmg;
             this.target.freeze =
                 tower.freeze;
 
@@ -578,13 +608,20 @@ class Bullet {
                 });
             }
 
+            this.target.dead = true;
+            if (this.target.type === "boss") {
+                stats.bossesKilled++;
+            }
+
             if (this.target.health <= 0) {
                 playSound("kill");
                 this.target.dead = true;
 
                 gold += this.target.reward;
-
+                stats.totalGoldEarned += this.target.reward;
+                stats.totalKills++;
                 kills++;
+                stats.totalKills++;
 
                 screenShake = 6;
 
@@ -704,6 +741,14 @@ function spawnWave() {
     }
 
     wave++;
+    texts.push(
+        new DamageText(
+            canvas.width / 2 - 80,
+            120,
+            `WAVE ${wave}`,
+            "#60a5fa"
+        )
+    );
 }
 
 /* ================= PRESTIGE ================= */
@@ -756,6 +801,7 @@ function gameOver() {
 
 function update() {
 
+
     if (!started) return;
 
     if (autoWave && !waveInProgress) {
@@ -763,6 +809,11 @@ function update() {
         spawnWave();
     }
 
+    const now = Date.now();
+
+    stats.playTime += (now - lastTime) / 1000;
+
+    lastTime = now;
     tower.cooldown -= gameSpeed;
 
     const target =
@@ -811,6 +862,7 @@ function update() {
                     bullets.push(
                         new Bullet(target)
                     );
+
                 }
             }
 
@@ -883,7 +935,7 @@ function update() {
                                     this.target.health -= dmg;
 
                                     damageDone += dmg;
-
+                                    stats.totalDamage += dmg;
                                     texts.push(
                                         new DamageText(
                                             this.x,
@@ -909,9 +961,10 @@ function update() {
                                         this.target.dead = true;
 
                                         gold += this.target.reward;
-
+                                        stats.totalGoldEarned += this.target.reward;
                                         kills++;
-
+                                        stats.totalKills++;
+                                        screenShake = 5;
                                         playSound("kill");
                                     }
 
@@ -991,7 +1044,11 @@ function update() {
         waveInProgress = false;
     }
 
-    gold += 0.08 * gameSpeed;
+    if (wave > stats.highestWave) {
+        stats.highestWave = wave;
+    }
+
+    gold += 0.04 * gameSpeed;
 
     updateUI();
 }
@@ -1168,7 +1225,32 @@ function drawBackground() {
 function drawTower() {
 
     ctx.save();
+    const pulse =
+        Math.sin(Date.now() * 0.004) * 4;
 
+    ctx.fillStyle =
+        tower.flameLevel > 0
+            ? "#f97316"
+            : "#3b82f6";
+
+    ctx.shadowBlur = 45;
+
+    ctx.shadowColor =
+        tower.flameLevel > 0
+            ? "#fb923c"
+            : "#60a5fa";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        0,
+        32 + pulse,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
     ctx.translate(
         tower.x,
         tower.y
@@ -1320,6 +1402,24 @@ function draw() {
     );
 
     ctx.restore();
+    ctx.strokeStyle =
+        "rgba(255,255,255,0.03)";
+
+    ctx.lineWidth = 1;
+
+    for (let x = 0; x < canvas.width; x += 60) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+    }
+
+    for (let y = 0; y < canvas.height; y += 60) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+    }
 }
 
 /* ================= LOOP ================= */
@@ -1338,7 +1438,17 @@ loop();
 
 waveBtn.onclick =
     spawnWave;
+screenShake = 15;
 
+particles.push(
+    ...Array.from({ length: 80 }, () =>
+        new Particle(
+            tower.x,
+            tower.y,
+            "#60a5fa"
+        )
+    )
+);
 autoBtn.onclick = () => {
 
     autoWave = !autoWave;
@@ -1474,7 +1584,7 @@ flameBtn.onclick = () => {
 
     // first unlock
     if (tower.flameLevel === 0) {
-        tower.flameLevel = 1;
+        tower.flameLevel = 10;
     } else {
         tower.flameLevel++;
     }
