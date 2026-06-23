@@ -103,7 +103,8 @@ function purchaseUpgrade(cost, successCallback) {
     updateUI(); 
     return true;
   } else {
-    alert("Not enough gold!");
+    // Spawns a floating notification over the tower instead of freezing the game!
+    texts.push(new DamageText(tower.x - 50, tower.y - 40, "Not enough gold!", "#ef4444"));
     return false;
   }
 }
