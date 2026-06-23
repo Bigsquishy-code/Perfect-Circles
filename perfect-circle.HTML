@@ -1,22 +1,26 @@
+!DOCTYPE html>  ```
+While modern browsers try to fix this behind the scenes via quirks-mode rendering, missing the strict wrapper can sometimes mess up how fixed-position elements (like your side panels) align layout properties over the canvas layer.
+
+---
+
+## 🛠️ The Cleaned & Verified DOM Sheet
+
+Here is the fully synced version of your HTML script. The element mappings are updated to perfectly support your event listeners and engine routines:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <link rel="stylesheet" href="styles.css">
-  <title>Perfect Circles</title>
+  <title>Perfect Circles V3</title>
 </head>
-
 <body>
 
-  <!-- ================= MENU ================= -->
   <div id="menu">
-
     <div id="menuCard">
-
       <div class="title">⭕ PERFECT CIRCLES V3</div>
-
       <div class="subtitle">
         Tower Defense • Strategy Layer • Evolution Engine
       </div>
@@ -38,33 +42,23 @@
       <div class="smallHint">
         Tip: V3 introduces scaling enemy intelligence + assistant AI combat
       </div>
-
     </div>
-
   </div>
 
-  <!-- ================= MAIN UI ================= -->
   <div id="ui">
 
-    <!-- CORE STATS -->
     <div class="panel">
-
       <h2>🏰 CORE</h2>
-
-      <div class="stat">Gold: <span id="gold">0</span></div>
-      <div class="stat">Crystals: <span id="crystals">0</span></div>
-      <div class="stat">Wave: <span id="wave">1</span></div>
-      <div class="stat">Kills: <span id="kills">0</span></div>
-      <div class="stat">DPS: <span id="dps">0</span></div>
-      <div class="stat">Lives: <span id="lives">20</span></div>
-
+      <div class="stat">Gold: <span id="goldEl">0</span></div>
+      <div class="stat">Crystals: <span id="crystalsEl">0</span></div>
+      <div class="stat">Wave: <span id="waveEl">1</span></div>
+      <div class="stat">Kills: <span id="killsEl">0</span></div>
+      <div class="stat">DPS: <span id="dpsEl">0</span></div>
+      <div class="stat">Lives: <span id="livesEl">20</span></div>
     </div>
 
-    <!-- UPGRADES (V2 CORE + V3 READY) -->
     <div class="panel">
-
       <h2>⬆ UPGRADES</h2>
-
       <button id="damageBtn"></button>
       <button id="speedBtn"></button>
       <button id="rangeBtn"></button>
@@ -73,28 +67,19 @@
       <button id="flameBtn"></button>
       <button id="assistantBtn"></button>
 
-      <!-- V3 EXPANSION SLOT (DO NOT REMOVE) -->
       <div id="v3UpgradeSlot"></div>
-
     </div>
 
-    <!-- CONTROL PANEL -->
     <div class="panel">
-
       <h2>⚡ CONTROL</h2>
-
       <button id="waveBtn">▶ START WAVE</button>
       <button id="speedToggle">⏩ SPEED x1</button>
-      <button id="autoBtn">AUTO WAVE: ON</button>
+      <button id="autoBtn">AUTO WAVE: OFF</button>
       <button id="prestigeBtn">✨ PRESTIGE</button>
-
     </div>
 
-    <!-- V3 STRATEGY LAYER PANEL (NEW - SAFE HOOK) -->
     <div class="panel">
-
       <h2>🧠 STRATEGY LAYER</h2>
-
       <button id="strategyModeBtn">TACTICS: OFF</button>
       <button id="aiOverlayBtn">AI OVERLAY</button>
       <button id="enemyIntelBtn">ENEMY INTEL</button>
@@ -102,15 +87,12 @@
       <div class="smallHint">
         V3 Feature: Unlocks predictive targeting + enemy behavior analysis
       </div>
-
     </div>
 
   </div>
 
-  <!-- ================= EFFECTS ================= -->
   <div id="vignette"></div>
 
-  <!-- GAME CANVAS -->
   <canvas id="game"></canvas>
 
   <script src="perfect-circle.js"></script>
